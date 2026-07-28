@@ -6,6 +6,12 @@ echo "========================================"
 echo "  CI APK 构建脚本 v8"
 echo "========================================"
 
+# 设置 Java 17（AGP 8.11 需要）
+export JAVA_HOME="/usr/lib/jvm/temurin-17-jdk-amd64"
+export PATH="$JAVA_HOME/bin:$PATH"
+echo "JAVA_HOME=$JAVA_HOME"
+java -version 2>&1 | head -1
+
 # 设置 SDK 路径
 export ANDROID_HOME="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
 export ANDROID_SDK_ROOT="$ANDROID_HOME"
