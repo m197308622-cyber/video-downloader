@@ -1,5 +1,5 @@
 # GitHub Actions — 自动编译 Android APK
-# 推送到 GitHub 后自动触发，编译完成的 APK 可在 Actions 页面下载
+# v7: ubuntu-22.04 + 手动构建 + SDK 34 安装 + Cython
 name: Build Android APK
 
 on:
@@ -8,11 +8,12 @@ on:
     paths:
       - 'mobile/**'
       - '.github/workflows/build-apk.yml'
-  workflow_dispatch:   # 允许手动触发
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+
     steps:
       - name: 🔽 检出代码
         uses: actions/checkout@v4
@@ -25,18 +26,18 @@ jobs:
       - name: 📦 系统依赖
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq lsof pkg-config openjdk-17-jdk autoconf automake libtool zlib1g-dev libncurses-dev libxml2-dev libxslt1-dev
+          sudo apt-get install -y -qq lsof pkg-config openjdk-17-jdk \
+            autoconf automake libtool zlib1g-dev libncurses-dev \
+            libxml2-dev libxslt1-dev ccache unzip wget
 
-      - name: 🏗 编译 APK
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          workdir: mobile
-          buildozer_version: stable
+      - name: 🏗 编译 APK (ci_build.sh)
+        run: |
+          cd mobile
+          bash ci_build.sh
 
       - name: 📤 上传 APK
         uses: actions/upload-artifact@v4
         with:
           name: VideoAudioDownloader-APK
-          path: ${{ steps.buildozer.outputs.filename }}
-          if-no-files-found: error
+          path: mobile/bin/*.apk
+          if-no-files-found: warn

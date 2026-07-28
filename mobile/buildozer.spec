@@ -19,8 +19,8 @@ requirements = python3,kivy==2.3.1,requests==2.32.3,yt-dlp==2026.7.4,certifi,url
 android.permissions = INTERNET,ACCESS_NETWORK_STATE,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,POST_NOTIFICATIONS
 android.api = 34
 android.minapi = 26
-android.sdk = 34
 android.ndk = 27
+android.ndk_api = 26
 android.accept_sdk_license = True
 
 # ── 架构（你的手机是 ARM64） ──
