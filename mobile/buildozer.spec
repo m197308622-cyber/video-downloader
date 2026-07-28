@@ -13,7 +13,7 @@ source.exclude_exts = spec,md
 source.exclude_dirs = tests, bin, __pycache__, .git, .github
 
 # ── 构建需求（用逗号分隔，版本用 ==） ──
-requirements = python3==3.11.11,kivy==2.3.1,requests==2.32.3,yt-dlp==2026.7.4,certifi,urllib3,idna,charset-normalizer
+requirements = python3,kivy==2.3.1,requests==2.32.3,yt-dlp==2026.7.4,certifi,urllib3,idna,charset-normalizer
 
 # ── 权限 ──
 android.permissions = INTERNET,ACCESS_NETWORK_STATE,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,POST_NOTIFICATIONS
