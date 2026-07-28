@@ -1,0 +1,9 @@
+# 手机端 Kivy App 依赖
+# 用于本地测试（在 Termux 中运行）
+kivy>=2.1.0
+requests>=2.28.0
+yt-dlp>=2024.0.0
+certifi
+urllib3
+charset-normalizer
+idna

@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv*/
+venv*/
+
+# 下载文件
+downloads/
+
+# ffmpeg 二进制
+bin/ffmpeg.exe
+bin/ffplay.exe
+bin/ffprobe.exe
+
+# Cookies
+cookies.txt
+
+# Buildozer 产物
+mobile/bin/
+mobile/.buildozer/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
