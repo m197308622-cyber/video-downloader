@@ -76,7 +76,7 @@ jobs:
 
       - name: 🏗 编译 APK
         run: |
-          buildozer android debug 2>&1
+          bash ci_build.sh 2>&1
 
       - name: 📤 上传 APK 工件
         uses: actions/upload-artifact@v4

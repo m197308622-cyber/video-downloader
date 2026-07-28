@@ -6,10 +6,10 @@ __pycache__/
 .venv*/
 venv*/
 
-# ä¸‹è½½æ–‡ä»¶
+# ÏÂÔØÎÄ¼ş
 downloads/
 
-# ffmpeg äºŒè¿›åˆ¶
+# ffmpeg ¶ş½øÖÆ
 bin/ffmpeg.exe
 bin/ffplay.exe
 bin/ffprobe.exe
@@ -17,9 +17,11 @@ bin/ffprobe.exe
 # Cookies
 cookies.txt
 
-# Buildozer äº§ç‰©
+# Buildozer ²úÎï
 mobile/bin/
 mobile/.buildozer/
+mobile/apache-ant-*/
+mobile/__pycache__/
 
 # IDE
 .vscode/
