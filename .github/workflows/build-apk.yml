@@ -69,11 +69,6 @@ jobs:
           path: ~/.buildozer/android/platform
           key: ${{ runner.os }}-android-platform-${{ hashFiles('mobile/buildozer.spec') }}
 
-      - name: 🔧 安装 Buildozer
-        run: |
-          pip install --upgrade pip setuptools wheel
-          pip install buildozer cython
-
       - name: 🏗 编译 APK
         run: |
           bash ci_build.sh 2>&1
