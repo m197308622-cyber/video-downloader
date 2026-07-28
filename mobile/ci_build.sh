@@ -44,15 +44,16 @@ if [ -n "$P4A" ] && [ -f "$P4A" ]; then
 fi
 
 # 设置环境变量
-export ANDROIDAPI=34
+# 检测可用的 API 版本并自动适配
+AVAILABLE_API=$(ls $ANDROIDSDK/platforms/ 2>/dev/null | grep -oP 'android-\K[0-9]+' | sort -rn | head -1)
+if [ -z "$AVAILABLE_API" ]; then
+    AVAILABLE_API=35
+fi
+echo ">>> 检测到 SDK API: $AVAILABLE_API"
+
+export ANDROIDAPI=$AVAILABLE_API
 export ANDROIDMINAPI=26
 export PATH=$ANDROIDSDK/tools/bin:$ANDROIDSDK/platform-tools:$PATH
-
-# 检查 SDK platform
-if [ ! -d "$ANDROIDSDK/platforms/android-34" ]; then
-    echo ">>> 安装 SDK platform 34..."
-    echo y | $ANDROIDSDK/tools/bin/sdkmanager --sdk_root=$ANDROIDSDK "platforms;android-34" 2>&1 | tail -3
-fi
 
 # 运行 p4a
 echo ">>> 编译 APK..."
@@ -63,7 +64,7 @@ python3 -m pythonforandroid.toolchain create \
   --arch=arm64-v8a \
   --sdk_dir=$ANDROIDSDK \
   --ndk_dir=$ANDROIDNDK \
-  --android_api=34 \
+  --android_api=$AVAILABLE_API \
   --min_android_api=26 \
   --copy-libs \
   --storage-dir=$GITHUB_WORKSPACE/mobile/.buildozer/android/platform/build-arm64-v8a \
