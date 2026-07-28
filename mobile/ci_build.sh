@@ -44,15 +44,16 @@ if [ -n "$P4A" ] && [ -f "$P4A" ]; then
 fi
 
 # 设置环境变量
-# 检测可用的 API 版本并自动适配
-AVAILABLE_API=$(ls $ANDROIDSDK/platforms/ 2>/dev/null | grep -oP 'android-\K[0-9]+' | sort -rn | head -1)
+# 使用预装 SDK 的最高 API 版本
+AVAILABLE_API=$(ls -d $ANDROIDSDK/platforms/android-* 2>/dev/null | sed 's/.*android-//' | sort -rn | head -1)
 if [ -z "$AVAILABLE_API" ]; then
     AVAILABLE_API=35
 fi
-echo ">>> 检测到 SDK API: $AVAILABLE_API"
+echo ">>> 检测到 SDK platform: android-$AVAILABLE_API"
 
 export ANDROIDAPI=$AVAILABLE_API
 export ANDROIDMINAPI=26
+export ANDROID_HOME=$ANDROIDSDK
 export PATH=$ANDROIDSDK/tools/bin:$ANDROIDSDK/platform-tools:$PATH
 
 # 运行 p4a
