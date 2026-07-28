@@ -31,7 +31,6 @@ android.orientation = portrait
 android.wakelock = True
 
 # ── 编译选项 ──
-android.gradle_dependencies = 'androidx.core:core:1.12.0'
 android.enable_androidx = True
 android.compile_sdk = 34
 android.build_tools = 34.0.0
