@@ -30,45 +30,17 @@ echo ">>> 安装 python-for-android..."
 pip install -q python-for-android cython 2>&1 | tail -1
 
 # 打 p4a 补丁（绕过 SDK target 检测 bug）
-P4A=$(find /home -path '*/pythonforandroid/build.py' 2>/dev/null | head -1)
-if [ -z "$P4A" ]; then
-    P4A=$(find /opt -path '*/pythonforandroid/build.py' 2>/dev/null | head -1)
-fi
-if [ -z "$P4A" ]; then
-    P4A=$(find / -path '*/pythonforandroid/build.py' 2>/dev/null | head -1)
-fi
+python3 -c "import pythonforandroid.build; print(pythonforandroid.build.__file__)" > /tmp/p4a_path.txt 2>&1
+P4A=$(cat /tmp/p4a_path.txt)
 echo "Found build.py: $P4A"
 
-if [ -n "$P4A" ]; then
+if [ -n "$P4A" ] && [ -f "$P4A" ]; then
     cp "$P4A" "${P4A}.bak"
-    python3 << 'PYEOF'
-import os
-p4a = os.environ.get('P4A', '')
-if not p4a:
-    import glob as g
-    files = g.glob('/**/pythonforandroid/build.py', recursive=True)
-    if files:
-        p4a = files[0]
-if p4a and os.path.exists(p4a):
-    with open(p4a, 'r') as f:
-        code = f.read()
-    old = "def get_targets(sdk_dir):\n    if exists(join(sdk_dir, 'cmdline-tools', 'latest', 'bin', 'avdmanager')):"
-    new = """def get_targets(sdk_dir):
-    import glob as _gl
-    _pf = [d for d in _gl.glob(join(sdk_dir, 'platforms', 'android-*'))]
-    if _pf:
-        return ['API level: ' + _pf[0].rsplit('-', 1)[-1]]
-    if exists(join(sdk_dir, 'cmdline-tools', 'latest', 'bin', 'avdmanager')):"""
-    if old in code:
-        code = code.replace(old, new)
-        with open(p4a, 'w') as f:
-            f.write(code)
-        print(f"Patched: {p4a}")
-    else:
-        print("Already patched or pattern not found")
-PYEOF
+    # 直接用 sed 插入早期返回
+    sed -i 's/def get_targets(sdk_dir):/def get_targets(sdk_dir):\n    import glob as _gl\n    _pf = [d for d in _gl.glob(os.path.join(sdk_dir, "platforms", "android-*"))]\n    if _pf:\n        return ["API level: " + _pf[0].rsplit("-", 1)[-1]]/' "$P4A"
+    echo "Patched successfully"
     # 清除 pyc
-    find $(dirname "$P4A") -name '__pycache__' -exec rm -rf {} + 2>/dev/null
+    find "$(dirname "$P4A")" -name '__pycache__' -exec rm -rf {} + 2>/dev/null
 fi
 
 # 设置环境变量
